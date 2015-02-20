@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/</loc>
+    <lastmod>2012-04-06T18:53:04-04:00</lastmod>
+  </url>
+  <url>
+    <loc>http://stanpalatnik.github.io/blog/2012/02/20/securing-php-flash-communication/</loc>
+    <lastmod>2012-02-20T17:38:24-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://stanpalatnik.github.io/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/</loc>
+    <lastmod>2011-01-20T16:44:32-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://stanpalatnik.github.io/blog/archives/</loc>
-    <lastmod>2015-02-20T15:54:09-05:00</lastmod>
+    <lastmod>2015-02-20T18:03:38-05:00</lastmod>
   </url>
   <url>
     <loc>http://stanpalatnik.github.io/</loc>
-    <lastmod>2015-02-20T15:54:09-05:00</lastmod>
+    <lastmod>2015-02-20T18:03:38-05:00</lastmod>
   </url>
 </urlset>

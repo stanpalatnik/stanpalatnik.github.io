@@ -1,24 +1,91 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Stan's Signed Stories]]></title>
-  <link href="http://stanpalatnik.github.io/atom.xml" rel="self"/>
-  <link href="http://stanpalatnik.github.io/"/>
-  <updated>2015-02-20T18:03:38-05:00</updated>
-  <id>http://stanpalatnik.github.io/</id>
-  <author>
-    <name><![CDATA[Stanislav Palatnik]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Express.js and Dust.js on Node.js - Stan&#8217;s Signed Stories</title>
+  <meta name="author" content="Stanislav Palatnik">
 
   
-  <entry>
-    <title type="html"><![CDATA[Using Express.js and Dust.js on Node.js]]></title>
-    <link href="http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/"/>
-    <updated>2012-04-06T18:53:04-04:00</updated>
-    <id>http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js</id>
-    <content type="html"><![CDATA[<p>Express.js is the most full-featured and popular Node.js open source framework. However, its default template library of choice – Jade, is far from impressive. Not only does it use it’s own syntax(you cannot use plain HTML), but it is limited to server-side rendering. In this post, we will setup Dust.js with Express.js for server-side rendering, as well as discuss a possible implementation with client-side rendering. <!--more--></p>
+  <meta name="description" content="Express.js is the most full-featured and popular Node.js open source framework. However, its default template library of choice – Jade, is far from &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Stan's Signed Stories" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stan&#8217;s Signed Stories</a></h1>
+  
+    <h2>My positive and negative experiences in software engineering</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="stanpalatnik.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Express.js and Dust.js on Node.js</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-04-06T18:53:04-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>6:53 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Express.js is the most full-featured and popular Node.js open source framework. However, its default template library of choice – Jade, is far from impressive. Not only does it use it’s own syntax(you cannot use plain HTML), but it is limited to server-side rendering. In this post, we will setup Dust.js with Express.js for server-side rendering, as well as discuss a possible implementation with client-side rendering. <!--more--></p>
 
 <p>Server-side rendering</p>
 
@@ -258,158 +325,134 @@ Search Engine Optimization - Search engine crawlers will not be able to use the 
 Click here to check out more information about the Dust.js API</p>
 
 <p>The major takeaways from this post is that Dust.js is a great templating engine. It’s powerful, versatile, and efficient. And with Express 3.0, it’s a breeze to setup.</p>
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[Securing PHP-Flash Communication]]></title>
-    <link href="http://stanpalatnik.github.io/blog/2012/02/20/securing-php-flash-communication/"/>
-    <updated>2012-02-20T17:38:24-05:00</updated>
-    <id>http://stanpalatnik.github.io/blog/2012/02/20/securing-php-flash-communication</id>
-    <content type="html"><![CDATA[<p>Virtually every computer in the world has flash installed. Whether you’re running Debain or Windows 7, there’s a distribution of Adobe Flash available for you. That makes Flash the most interoperable environment available. Now let’s say you want to embed Flash into a website. Either you want a submission form, chat box, or a simple game, you will most likely need to communicate back and forth with the server. Doesn’t sound hard at all, especially with so many libraries available and so many services you can use(REST, XMLRPC, JSON, XMLSocket for low latency communication, or just a simple HTTP GET request to the PHP page). However, how sure are you of the validity of the data transferred from the client-side Flash app back to your server?</p>
 
-<p>All programming languages preach to never trust user input directly. For a simple example, a good program will even check that a person’s name is made of valid and accepted characters. However, too many people unfortunately ignore this rule when they create Flash apps. Even if you’re creating a contact form field, there are many ways a user could exploit your site if you don’t properly secure the client’s input. Most notably, he could create an SQL injection the input fields.</p>
+<span class="byline author vcard">Posted by <span class="fn">Stanislav Palatnik</span></span>
 
-<p>Fortunately for form fields, there are bullet proof ways to secure them. In the following section I will discuss those. However, I will also talk about more sophisticated applications such as games which track levels and submit high scores. In these cases, it’s not possible to secure your high score list 100% , but you can make it sufficiently difficult for most.</p>
-
-<!--more-->
+      
 
 
-<p>Securing simple form fields:</p>
 
-<p>The first basic step is to obviously validate the form fields inside of Flash. But this is by no means makes your application secure. If anything, it saves an extra HTTP request. You will also have to duplicate this form verification on the server side. The most important thing you can do on server-side verification is check for an SQL injection. If you’re using MySQL, pass it through the mysql_real_escape_string or mysqli_real_escape_string. I strongly prefer you use mysqli_real_escape_string because it avoids some security flaws present in the former function.</p>
 
-<p>Now that we secured basic input, we need to protect against spoofing and DDOS attacks. Suppose that an attacker wants to slow your site down considerably, or even bring it down. One way he could do it is by flooding the server with requests. If the server believes this request came from your trusted application, it will send it to your database. Even though your database will filter the content, hundreds of thousands of requests to your database will most likely bring it down. One way to protect against spoofing is by using tokens.</p>
+<time class='entry-date' datetime='2012-04-06T18:53:04-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>6:53 pm</span></time>
+      
 
-<p>Tokens:</p>
 
-<p>Here’s one way to approach it. Every time your trusted form sends a request to the server, it will also send along a secure token.</p>
-
-<p>First the server will send a random string to the Flash and save the encrypted version of this string in the database. This string will be encrypted using a token that will be hard-coded into the Flash game as well as in the PHP. Now, whenever the Flash form loads, it must request a random string to be sent to it. It will then use the secure key that you hard coded to create a token and send the token along with the response. Once the server recieves your request, it will compare your encrypted token with the ones stored in the database. If there is a match, only then should you process the form. Also remember to delete the matching token from the database after that. If the token received does not match any token that have been generated in say, the last hour, then discard that request.</p>
-
-<p>Encrypting Your Source</p>
-
-<p>The last part is to obfuscate your action-script source good enough to deter hackers from trying to find the form fields and even the encryption key. Encrypt the entire action-script with a library like as3corelib. This will prevent the vast majority of people from proceeding. They will not be able to read your source and even think about finding the encryption key. Now whenever a user submits the form from your trusted app, it will also send the token. However, decompiling action-script is much easier then other languages because action-script is a very high level programming language, not to mention the byte-codes are well documented. Here are some ways to deter or confuse an attacker who has decrypted your application:</p>
-
-<p>Replacing key byte arrays with functions that calculate the key
-Placing numerous fake encrption keys throughout the app.
-I also recommend this strategy for securing Flash games, so I will not go over it again.</p>
-
-<p>Securing Flash Game Points Submission</p>
-
-<p>The biggest problem with Flash-based games is how easily the high score lists can be hacked. One of the best(and most complicated) ways to protect against this is to put all the game logic on the server. That way, whenever a user submits a new high score, your server side script checks if that score is possible with the moves that the user has. For example, if the highest recorded level that the user has reached is 5, there is no way for him to have reached score x. For this to work, you cannot send HTTP requests indicating when the level has changed. The change must be determined on the server, after the Flash client has sent some command. This command should trigger a change in the level.</p>
-
-<p>If you have a fast paced game, where there are a lot of command getting executed at the same time, you could open a socket.</p>
-
-<p>There are many other ways to secure Flash apps, but to have basic security, I advise that you follow the encryption method mentioned in this post.</p>
-]]></content>
-  </entry>
+    </p>
+    
+      <div class="sharing">
   
-  <entry>
-    <title type="html"><![CDATA[Parenthesis Confusion in C++]]></title>
-    <link href="http://stanpalatnik.github.io/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/"/>
-    <updated>2011-01-20T16:44:32-05:00</updated>
-    <id>http://stanpalatnik.github.io/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus</id>
-    <content type="html"><![CDATA[<p>I ran into this problem at least once, and I never actually thought about why it worked with or without the parenthesis, and thought that I was just doing something else wrong. But it was only so easy for me because I was doing a relatively small project, and the changes usually didn&#8217;t affect any other files. I never really thought why or how it works. But if you&#8217;re developing large scale applications or just portions of it, you need to make sure that you use it properly, or it might be a pain to debug it later. For example, as I will explain later, forgetting to add a parenthesis will keep POD class values from being properly initialized in some cases. If you don&#8217;t know the properties of POD class initialization, you could be scratching your head when a comparison fails or the compiler throws you a run-time error! If this doesn&#8217;t make sense yet, I recommend that you continue reading.</p></p>
-
-<!--more-->
-
-
-<p>First thing I want to clear up is this post deals with the dilemma when you create objects using the <a href="http://en.wikipedia.org/wiki/New_%28C%2B%2B%29">new operator</a>. If you don&#8217;t, then there really is no debate. Consider the following example:</p>
-
-
-<figure class='code'><figcaption><span>Simple declaration example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">struct</span> <span class="n">Stan</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>     <span class="kt">int</span> <span class="n">man</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="n">Stan</span> <span class="n">s1</span><span class="p">;</span>
-</span><span class='line'><span class="n">Stan</span> <span class="nf">s2</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Here, the second initialization is obviously wrong in this context, because the C++ compiler will interpret it as a function definition with no parameters that returns a Stan object This is clear from the syntax. Things are straightforward so far.</p>
-
-
-<p>So does it matter if you add a parenthesis at the end of a <strong>dynamically generated class</strong>? It should definitely matter right?</p>
-
-
-<figure class='code'><figcaption><span>Using the Stan class from the previous example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">Stan</span> <span class="o">*</span><span class="n">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stan</span><span class="p">;</span>
-</span><span class='line'><span class="n">Stan</span> <span class="o">*</span><span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stan</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So what&#8217;s going on here! s1 and s2 can&#8217;t both be correct right? But once you test it out, it might appear that it doesn&#8217;t matter at all. In Visual Studio 2008, the compiler doesn&#8217;t throw an error or warning at either of these two declarations. But there are some important differences between these two initializations. I will review the differences in accordance with the c++03 revision. For the run down with the c++98 revision, see Philip Taylor&#8217;s comment <a href="http://blogs.msdn.com/oldnewthing/archive/2006/12/14/1285437.aspx#1296360">here on a msdn blog</a>.</p>
-
-
-<p>First let me introduce some terminology. POD means &#8216;Plain Old Data&#8217;. In C++, objects are either POD or non-POD. A POD class can be described as a simple class with little logic. More specifically, to be a POD class, it has to have data members of one of the following data-types: a built-in type(ie int, double), pointer, union, struct, array, or a class with a trivial constructor. The constructor part basically means that if you did not create a default constructor for your class, the C++ compiler will generate the generic constructor for you. A trivial constructor is a constructor that the compiler generates for you. In addition, a POD class cannot have other data types that are non-POD(for example, a string data type is not a POD class because it has a defined constructor). There are many things that would make a class non-POD even if it contains any of the members mentioned above:</p>
-
-
-<ol>
-<li>User defined constructor</li>
-<li>User defined copy constructor</li>
-<li>User defined assignment operator</li>
-<li>User defined destructor</li>
-<li>Non-POD data types such as a string or a non-POD class</li>
-</ol>
-
-
-<p>Now let&#8217;s go through the differences between these two initializations.</p>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">Stan</span> <span class="o">*</span><span class="n">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stan</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this case, s1 is default initialized, which means that all POD data-types will be left uninitialized. In this case, any int will be uninitialized.</p>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">Stan</span> <span class="o">*</span><span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stan</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here s2 will be value initialized, which means that all data members will be initialized. Here, int will be zero-initialized to 0. Looking at the differences between these two initializations(s1 and s2), it&#8217;s clear that if you initialize a POD class without parenthesis, you risk having uninitialized data members. Now if you try to access them, you might get a segfault error. This can be a real headache. If you don&#8217;t know that leaving out parenthesis can cause an int to be uninitialized, then it will be hard to find the problem.</p>
-
-
-<p>Let&#8217;s consider another class.</p>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">struct</span> <span class="n">Stan</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>     <span class="kt">int</span> <span class="n">the</span><span class="p">;</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>     <span class="n">Stan</span><span class="p">()</span><span class="o">:</span><span class="n">the</span><span class="p">()</span> <span class="p">{};</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>According to C++03, since I have create a non-trivial default constructor, this is a non-POD class now. So it doesn&#8217;t matter if I use the parenthesis, or I don&#8217;t.</p>
-
-
-<p>So to sum it up, if you don&#8217;t have a POD class, or if you&#8217;re not intentionally planning to leave member objects uninitialized, then I would recommend that you always use parenthesis at the end of your class initializations to avoid possible headaches down the road. In reality, you will rarely create POD classes because they are so simple(unless you&#8217;re into functional programming?). The only time I imagine you running into this problem is when the parenthesis was accidently forgotten.</p>
-
-]]></content>
-  </entry>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/" data-via="" data-counturl="http://stanpalatnik.github.io/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/" >Tweet</a>
   
-</feed>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/02/20/securing-php-flash-communication/" title="Previous Post: Securing PHP-Flash Communication">&laquo; Securing PHP-Flash Communication</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">Using Express.js and Dust.js on Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/02/20/securing-php-flash-communication/">Securing PHP-Flash Communication</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/">Parenthesis Confusion in C++</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/stanpalatnik">@stanpalatnik</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stanpalatnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Stanislav Palatnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

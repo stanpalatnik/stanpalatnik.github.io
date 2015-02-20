@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: C++ | Stan's Signed Stories]]></title>
+  <link href="http://stanpalatnik.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://stanpalatnik.github.io/"/>
+  <updated>2015-02-20T18:03:38-05:00</updated>
+  <id>http://stanpalatnik.github.io/</id>
+  <author>
+    <name><![CDATA[Stanislav Palatnik]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Parenthesis Confusion in C++]]></title>
+    <link href="http://stanpalatnik.github.io/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/"/>
+    <updated>2011-01-20T16:44:32-05:00</updated>
+    <id>http://stanpalatnik.github.io/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus</id>
+    <content type="html"><![CDATA[<p>I ran into this problem at least once, and I never actually thought about why it worked with or without the parenthesis, and thought that I was just doing something else wrong. But it was only so easy for me because I was doing a relatively small project, and the changes usually didn&#8217;t affect any other files. I never really thought why or how it works. But if you&#8217;re developing large scale applications or just portions of it, you need to make sure that you use it properly, or it might be a pain to debug it later. For example, as I will explain later, forgetting to add a parenthesis will keep POD class values from being properly initialized in some cases. If you don&#8217;t know the properties of POD class initialization, you could be scratching your head when a comparison fails or the compiler throws you a run-time error! If this doesn&#8217;t make sense yet, I recommend that you continue reading.</p></p>
+
+<!--more-->
+
+
+<p>First thing I want to clear up is this post deals with the dilemma when you create objects using the <a href="http://en.wikipedia.org/wiki/New_%28C%2B%2B%29">new operator</a>. If you don&#8217;t, then there really is no debate. Consider the following example:</p>
+
+
+<pre><code class="c++ Simple declaration example">struct Stan
+{
+     int man;
+};
+
+
+Stan s1;
+Stan s2();
+</code></pre>
+
+<p>Here, the second initialization is obviously wrong in this context, because the C++ compiler will interpret it as a function definition with no parameters that returns a Stan object This is clear from the syntax. Things are straightforward so far.</p>
+
+
+<p>So does it matter if you add a parenthesis at the end of a <strong>dynamically generated class</strong>? It should definitely matter right?</p>
+
+
+<pre><code class="c++ Using the Stan class from the previous example">Stan *s1 = new Stan;
+Stan *s2 = new Stan();
+</code></pre>
+
+<p>So what&#8217;s going on here! s1 and s2 can&#8217;t both be correct right? But once you test it out, it might appear that it doesn&#8217;t matter at all. In Visual Studio 2008, the compiler doesn&#8217;t throw an error or warning at either of these two declarations. But there are some important differences between these two initializations. I will review the differences in accordance with the c++03 revision. For the run down with the c++98 revision, see Philip Taylor&#8217;s comment <a href="http://blogs.msdn.com/oldnewthing/archive/2006/12/14/1285437.aspx#1296360">here on a msdn blog</a>.</p>
+
+
+<p>First let me introduce some terminology. POD means &#8216;Plain Old Data&#8217;. In C++, objects are either POD or non-POD. A POD class can be described as a simple class with little logic. More specifically, to be a POD class, it has to have data members of one of the following data-types: a built-in type(ie int, double), pointer, union, struct, array, or a class with a trivial constructor. The constructor part basically means that if you did not create a default constructor for your class, the C++ compiler will generate the generic constructor for you. A trivial constructor is a constructor that the compiler generates for you. In addition, a POD class cannot have other data types that are non-POD(for example, a string data type is not a POD class because it has a defined constructor). There are many things that would make a class non-POD even if it contains any of the members mentioned above:</p>
+
+
+<ol>
+<li>User defined constructor</li>
+<li>User defined copy constructor</li>
+<li>User defined assignment operator</li>
+<li>User defined destructor</li>
+<li>Non-POD data types such as a string or a non-POD class</li>
+</ol>
+
+
+<p>Now let&#8217;s go through the differences between these two initializations.</p>
+
+
+<pre><code class="c++ ">Stan *s1 = new Stan;&lt;/pre&gt;
+</code></pre>
+
+<p>In this case, s1 is default initialized, which means that all POD data-types will be left uninitialized. In this case, any int will be uninitialized.</p>
+
+
+<pre><code class="c++">Stan *s2 = new Stan();
+</code></pre>
+
+<p>Here s2 will be value initialized, which means that all data members will be initialized. Here, int will be zero-initialized to 0. Looking at the differences between these two initializations(s1 and s2), it&#8217;s clear that if you initialize a POD class without parenthesis, you risk having uninitialized data members. Now if you try to access them, you might get a segfault error. This can be a real headache. If you don&#8217;t know that leaving out parenthesis can cause an int to be uninitialized, then it will be hard to find the problem.</p>
+
+
+<p>Let&#8217;s consider another class.</p>
+
+
+<pre><code class="c++ ">struct Stan
+{
+     int the;
+public:
+     Stan():the() {};
+};
+</code></pre>
+
+<p>According to C++03, since I have create a non-trivial default constructor, this is a non-POD class now. So it doesn&#8217;t matter if I use the parenthesis, or I don&#8217;t.</p>
+
+
+<p>So to sum it up, if you don&#8217;t have a POD class, or if you&#8217;re not intentionally planning to leave member objects uninitialized, then I would recommend that you always use parenthesis at the end of your class initializations to avoid possible headaches down the road. In reality, you will rarely create POD classes because they are so simple(unless you&#8217;re into functional programming?). The only time I imagine you running into this problem is when the parenthesis was accidently forgotten.</p>
+
+]]></content>
+  </entry>
+  
+</feed>
