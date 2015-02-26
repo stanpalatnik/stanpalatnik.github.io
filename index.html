@@ -9,7 +9,7 @@
   <meta name="author" content="Stanislav Palatnik">
 
   
-  <meta name="description" content="Express.js is the most full-featured and popular Node.js open source framework. However, its default template library of choice – Jade, is far from &hellip;">
+  <meta name="description" content="Why do we need Java generics? Generics introduce a new level of compile-time type safety. This in itself makes it one of the most impactful updates &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,65 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/21/java-generics-in-depth/">Java Generics in Depth</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-21T16:59:07-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>4:59 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Why do we need Java generics?</h3>
+
+
+<p>Generics introduce a new level of compile-time type safety. This in itself makes it one of the most impactful updates to Java’s core, and arguable, brings a sane amount of type safety to the Collections framework. The most common bug this is meant to address is a nasty ClassCastException when we believe an object is of one type when really it&rsquo;s not. With Generics, this is caught at compile-time. Additionally, it improves code readability by absolving the programmer from using explicit casts.</p>
+
+<h3>Quick overview of terminology</h3>
+
+
+
+
+<figure class='code'><figcaption><span>simple generic class that extends another generic class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MimicList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">T</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">findAlphaMimic</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here, MimicList<T> is a generic type. T is the type placeholder. The placeholder isn&rsquo;t limited to a single letter - any valid Java identifier will do. A generic type can have one or more type placeholders. By adding <T> type holder to a class, we are turning it into a generic type. It is represented by a concrete type when we declare/initialize MimicList as a concrete parameterized type. If your generic class is extending or implementing another generic class, you can use the same type placeholder(T) in the class we are extending to represent the same type. You cannot initialize a generic type directly(new MimicList<T>() ) because it is an abstract type. You also cannot use a primitive type to as a type parameter. That&rsquo;s because it must be convertible to java.lang.Object when the compiler performs type erasure.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/02/21/java-generics-in-depth/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -183,6 +242,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/21/java-generics-in-depth/">Java Generics in Depth</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">Using Express.js and Dust.js on Node.js</a>

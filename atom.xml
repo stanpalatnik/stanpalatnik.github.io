@@ -4,7 +4,7 @@
   <title><![CDATA[Stan's Signed Snippets]]></title>
   <link href="http://stanpalatnik.github.io/atom.xml" rel="self"/>
   <link href="http://stanpalatnik.github.io/"/>
-  <updated>2015-02-20T21:13:04-05:00</updated>
+  <updated>2015-02-25T23:19:21-05:00</updated>
   <id>http://stanpalatnik.github.io/</id>
   <author>
     <name><![CDATA[Stanislav Palatnik]]></name>
@@ -12,6 +12,267 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Java Generics in Depth]]></title>
+    <link href="http://stanpalatnik.github.io/blog/2015/02/21/java-generics-in-depth/"/>
+    <updated>2015-02-21T16:59:07-05:00</updated>
+    <id>http://stanpalatnik.github.io/blog/2015/02/21/java-generics-in-depth</id>
+    <content type="html"><![CDATA[<h3>Why do we need Java generics?</h3>
+
+
+<p>Generics introduce a new level of compile-time type safety. This in itself makes it one of the most impactful updates to Java’s core, and arguable, brings a sane amount of type safety to the Collections framework. The most common bug this is meant to address is a nasty ClassCastException when we believe an object is of one type when really it&rsquo;s not. With Generics, this is caught at compile-time. Additionally, it improves code readability by absolving the programmer from using explicit casts.</p>
+
+<h3>Quick overview of terminology</h3>
+
+
+
+
+<figure class='code'><figcaption><span>simple generic class that extends another generic class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MimicList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">T</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">findAlphaMimic</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here, MimicList<T> is a generic type. T is the type placeholder. The placeholder isn&rsquo;t limited to a single letter - any valid Java identifier will do. A generic type can have one or more type placeholders. By adding <T> type holder to a class, we are turning it into a generic type. It is represented by a concrete type when we declare/initialize MimicList as a concrete parameterized type. If your generic class is extending or implementing another generic class, you can use the same type placeholder(T) in the class we are extending to represent the same type. You cannot initialize a generic type directly(new MimicList<T>() ) because it is an abstract type. You also cannot use a primitive type to as a type parameter. That&rsquo;s because it must be convertible to java.lang.Object when the compiler performs type erasure.</p>
+
+<!--more-->
+
+
+<figure class='code'><figcaption><span>a parameterized concrete type</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">MimicList</span><span class="o">&lt;</span><span class="n">Earth</span><span class="o">&gt;</span> <span class="n">omegas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MimicList</span><span class="o">&lt;</span><span class="n">Earth</span><span class="o">&gt;();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A parameterized type is dependant on an existing generic type definition to exist. If I tried to initialize MimicList<Earth> without making MimicList a generic type(above), it would fail at compile-time.</p>
+
+<p>The code below demonstrates why we can&rsquo;t use primitives as type parameters. After the compiler strips the type information(Type Erasure, discussed later), it has to use casts to ensure that we are working with the parameterized type we initialized the object with, or throw an exception that we can&rsquo;t, say, put the result of list.get(0) into a Integer.</p>
+
+<figure class='code'><figcaption><span>user generated code</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">MimicList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">mimicList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MimicList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+</span><span class='line'><span class="n">mimicList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;MIMIC&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">String</span> <span class="n">mimic</span> <span class="o">=</span> <span class="n">mimicList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>becomes..</p>
+
+<figure class='code'><figcaption><span>compiler code … effects of type erasure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">MimicList</span> <span class="n">mimicList</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MimicList</span><span class="o">();</span>
+</span><span class='line'><span class="n">mimicList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;MIMIC&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">String</span> <span class="n">mimic</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">mimicList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// the compiler must add a cast to enforce type safety</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The compiler would erase all type information from parameterized types and instead add explicit casts to raw types. At the bytecode level, both a generic class a raw class would look exactly the same. One consequence of this is that objects at runtime do not contain information about their generic arguments (although the information is still present on fields, method, constructors and extended class and interfaces). A benefit to this is since all type information is erased, there&rsquo;s only need for one version of the generic class to be stored in the bytecode for all variations of possible types(in comparison to C++ templating where each type had it&rsquo;s own version).</p>
+
+<p>The type information would be completely erased, making generics non-reifiable. Bridge methods were also added on a case by case basis.</p>
+
+<h3>Extending generics</h3>
+
+
+<p>I briefly alluded that we can easily extend an existing generic class with a new generic class without much complication. In the example above, type T is an unbounded type parameter that is a type placeholder for MimicList. If we initialize MimicList as a raw type, then the underlying superclass will also be initialized as a raw class.</p>
+
+<h3>Raw Classes</h3>
+
+
+<p>A raw class is basically a generic class declared without any type parameters. Any inner classes of a raw class will also be a raw class. The only exception is a static inner class. It would be considered raw because it&rsquo;s technically not a parameterized type. It’s not even part of that instance, since it’s just a static.</p>
+
+<p>In this example, we have no need for a placeholder because we are not referencing it anywhere. In such cases we can just replace it with ? to mean the same thing. It will have the same effect of creating a generic class definition with an unbounded type - any reference type. We still have the same type safety guarantees as if we used a java identifier instead. A wildcard without bounds is called an unbounded wildcard.</p>
+
+<h3>Variance</h3>
+
+
+<p>Covariant, Invariant, and Contravariant. These concepts are the building blocks of subtyping in modern languages. In Java, generics are invariant. Just because class Y is a subclass of class X does not mean that SomeGeneric<Y> will be a subclass of SomeGeneric<X>. It won’t.</p>
+
+<h3>History of Type erasure</h3>
+
+
+<p>Type Erasure exists because Sun wanted to keep binary compatibility with older versions of Java(versions 4 and below) when Java 5 with Generics was introduced. It&rsquo;s also basically the reason Raw classes are still allowed. There is no excuse to use a raw class when you have wildcard bounds(The only exception being class literals and the instanceof operator). At worst case, the unbounded wildcard type should fit any scenario. Bridge methods are quite useful since they let us use generic types as raw types, and more importantly, allow us to use parameterized types in function calls after their type parameters are erased by .. type erasure. Is that redundant enough for you?? Unfortunately, because Java generics are non-reified, there are two exceptions where raw types must be used in new code:</p>
+
+<ol>
+<li>Class literals, e.g. List.class, not List<String>.class</li>
+<li>instanceof operand, e.g. o instanceof Set, not o instanceof Set<String></a></li>
+</ol>
+
+
+<p>Sometimes you need to use a raw type or use an explicit unchecked typecast. Whether it&rsquo;s for immovable things like legacy code or practical purposes like unit/mock testing, there are acceptable scenarios where we might want to forego strong compile-time safetey. To do so, we have to annoate the piece of code with @SuppressWarnings(&ldquo;unchecked&rdquo;).</p>
+
+<figure class='code'><figcaption><span>surpress the cries of the compiler</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">someETL</span><span class="o">(</span><span class="n">Collection</span> <span class="n">legacyCollection</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'><span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">&quot;unchecked&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">typedLegacyCollection</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;)</span><span class="n">legacyCollection</span><span class="o">;</span>
+</span><span class='line'><span class="c1">// process </span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s recommended you place the annotation as close to the offending line as possible. We could have placed it before the function defintion, but then all unchecked warnings in that function would be ignored, not just the initial conversion of List<String>. Likewise, if we placed it before the class declaration, it would mask weak typing warnings througout the entire class!</p>
+
+<h3>Wildcards</h3>
+
+
+<p>
+Wildcard types can be pretty confusing. I’ll just have a simple overview. They are very useful when we want to introduce some type flexibility into our functions and collections, but at the same time be able to keep all the compile-time safety that generics provides us.</p>
+
+<figure class='code'><figcaption><span>simple mimic list</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SimpleMimicList</span><span class="o">&lt;?&gt;</span> <span class="o">{</span> <span class="c1">//we can’t use wildcards in class declarations</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">findAlphaMimic</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One practice that takes advantage of flexible wildcards is the PECS principle.</p>
+
+<h2>Producer Extends, Consumer Super principle</h2>
+
+
+<p>The idea behind PECS is super simple, but it&rsquo;s not intuitive just from reading that title. In fact if you dig deep enough it&rsquo;s a very complicated topic dealing with variance(covariance and contravariance). But it&rsquo;s actually very simple if you just think of it in terms of type safety.</p>
+
+<p>Let&rsquo;s start with an abstract type Soldier and some concrete classes</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Soldier</span> <span class="o">{</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">attack</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//pew pew</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Rita</span> <span class="kd">extends</span> <span class="n">Soldier</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">attack</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">//SPLICE SPLICE BOOM</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cage</span> <span class="kd">extends</span> <span class="n">Soldier</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">attack</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">//how do I turn this safetey off??</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Kimmel</span> <span class="kd">extends</span> <span class="n">Soldier</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">attack</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">//</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The “Producer” collection</h3>
+
+
+<p>A collection whose type must be a class that extends the specified type(or itself), meaning that when we have a wildcard type of &lt;? extends Soldier>, it means:</p>
+
+<ol>
+<li>You are guaranteed when you read from this collection, the object will be at least a type of Soldier</li>
+<li>You can not put anything inside of this collection, except for null. <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html">That&#8217;s because null can technically be of any type.</a></li>
+<li>This is called a Producer collection because it produces data. This is point of view from the collection</li>
+</ol>
+
+
+<p>The reason that you can&rsquo;t put anything inside of a Producer collection is because it will break the type safety guarantees. Let&rsquo;s give an example:</p>
+
+<figure class='code'><figcaption><span>writing to extends(producer)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Soldier</span><span class="o">&gt;</span> <span class="n">allSoldiers</span> <span class="o">=</span> <span class="n">getAllCages</span><span class="o">();</span> <span class="c1">// returns ArrayList&lt;Cage&gt; </span>
+</span><span class='line'><span class="n">allSoldiers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">Cage</span><span class="o">());</span> <span class="c1">//not legal</span>
+</span><span class='line'><span class="n">allSoldiers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">Soldier</span><span class="o">());</span> <span class="c1">// not legal as well..</span>
+</span><span class='line'><span class="n">allSoldiers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">Object</span><span class="o">());</span> <span class="c1">//not legal</span>
+</span><span class='line'><span class="n">allSoldiers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">// &lt;a href=”http://img.444.hu/jackie.gif”&gt;this is legal.&lt;/a&gt; </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why are none of these legal? Because the allSoldiers reference can point to either a collection of Soldier, Rita, Cage, or Kimmel. But at compile time we don’t know which one it’s going to be. For type safety, the compiler cannot allow us to add class which might or might not cause a cast exception. All the compiler knows is that whichever class we initialize allSoldiers with, it must at least be a Soldier.</p>
+
+<figure class='code'><figcaption><span>reading from extends(producer)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Soldier</span><span class="o">&gt;</span> <span class="n">allSoldiers</span> <span class="o">=</span> <span class="n">getAllCages</span><span class="o">();</span> <span class="c1">// returns ArrayList&lt;Cage&gt; </span>
+</span><span class='line'><span class="n">Soldier</span> <span class="n">oneSoldier</span> <span class="o">=</span> <span class="n">allSoldiers</span> <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// this is perfectly fine. </span>
+</span><span class='line'><span class="n">Cage</span> <span class="n">oneCage</span> <span class="o">=</span> <span class="n">allSoldiers</span> <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// this is NOT legal. </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This argument is similar. Can you spot the pattern here? Yes, it’s all about ensuring type safety. We can only be sure that allSoldiers will be at worst case a type of Soldier, at compile time. At run-time, it could point to a reference of Kimmels for all we know.</p>
+
+<h3>The “Consumer” collection</h3>
+
+
+<p>A collection whose type is a supertype of the provided class, meaning that when we have a wildcard type of &lt;? super Soldier>. This means:</p>
+
+<ol>
+<li>You are guaranteed when you write to this collection, the object must be a Soldier or it’s supertype</li>
+<li>As a consequence, we can only initialize the generic with a reference who’s type must be a supertyper</li>
+<li>This is called a Consumer collection because it consumes data. This is point of view from the collection</li>
+<li>User defined destructor</li>
+<li>The only type you are guaranteed to get back when you read from this collection is Object</li>
+</ol>
+
+
+
+
+<figure class='code'><figcaption><span>initializing super(consumer)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Rita</span><span class="o">&gt;</span> <span class="n">maybeRitas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Soldier</span><span class="o">&gt;();</span> <span class="c1">//legal, Soldier is supertype of Rita</span>
+</span><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Rita</span><span class="o">&gt;</span> <span class="n">maybeRitas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Rita</span><span class="o">&gt;();</span> <span class="c1">// legal, it’s own type guarantees type safety</span>
+</span><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Rita</span><span class="o">&gt;</span> <span class="n">maybeRitas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span> <span class="c1">// legal</span>
+</span><span class='line'><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Rita</span><span class="o">&gt;</span> <span class="n">maybeRitas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Cage</span><span class="o">&gt;();</span> <span class="c1">// not legal, Cage is not a supertype of Rita</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why does ? super Rita give us flexible type safety? In the example code above, it’s clear what we can only initialize maybeRitas with a supertype of class Rita. So it can only be of type Rita, Soldier, or Object. Let’s say we then want to add something to this collection. We are confident that if we an instance of Soldier into maybeRitas, it is guaranteed to be a subtype of whatever type we initialized the list with(Rita, Soldier, Object). But you can’t, for example, add a String, Int, or Cage to maybe Ritas no matter which of those three initializations was chosen.</p>
+
+<p>This discussion can delve further into the differences between extends/super between not only initialization, but also it’s implications on the methods of the initialized objects. I might delve further into this but this seems like a nice overview of Java&rsquo;s attempt to bring more compile-time type safety to the language.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Express.js and Dust.js on Node.js]]></title>
