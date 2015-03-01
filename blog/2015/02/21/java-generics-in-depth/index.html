@@ -170,7 +170,8 @@ However, there is a syntactic addition to force the type parameter to be covaria
 <h3>Bounded Type Parameters</h3>
 
 
-<p>Type bounds can be restricted with the super or extends keyword. If you want to restrict initialization to instances of itself or it&rsquo;s subtype, you use the extends keyword(covariance). If you need to limit the initiziation to itself or all supertypes, you use the super keyword. You are not limited in how many bounds you can specify. You can only have one class bound(since multiple inheritance is not allowed in Java), but you can have an unlimited number of interface bounds!</p>
+<p>Type bounds can be restricted with the super or extends keyword. If you want to restrict initialization to instances of itself or it&rsquo;s subtype, you use the extends keyword(covariance). If you need to limit the initiziation to itself or all supertypes, you use the super keyword(contravariance). You are not limited in how many bounds you can specify. You can only have one class bound(since multiple inheritance is not allowed in Java), but you can have an unlimited number of interface bounds!
+Later we&rsquo;ll discuss why this makes our code much more flexible without decreasing type-safety.</p>
 
 <h3>History of Type erasure</h3>
 
