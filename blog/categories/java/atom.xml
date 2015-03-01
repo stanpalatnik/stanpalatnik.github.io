@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | Stan's Signed Snippets]]></title>
   <link href="http://stanpalatnik.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://stanpalatnik.github.io/"/>
-  <updated>2015-02-25T23:19:21-05:00</updated>
+  <updated>2015-03-01T14:08:19-05:00</updated>
   <id>http://stanpalatnik.github.io/</id>
   <author>
     <name><![CDATA[Stanislav Palatnik]]></name>
@@ -79,7 +79,13 @@ String mimic = (String)mimicList.get(0); // the compiler must add a cast to enfo
 <h3>Variance</h3>
 
 
-<p>Covariant, Invariant, and Contravariant. These concepts are the building blocks of subtyping in modern languages. In Java, generics are invariant. Just because class Y is a subclass of class X does not mean that SomeGeneric<Y> will be a subclass of SomeGeneric<X>. It won’t.</p>
+<p>Covariant, Invariant, and Contravariant. These concepts are the building blocks of subtyping in modern languages. In Java, generics are invariant by default. Just because class Y is a subclass of class X does not mean that SomeGeneric<Y> will be a subclass of SomeGeneric<X>. It won’t. The main reason is because generics are non-reified thanks to type erasure.
+However, there is a syntactic addition to force the type parameter to be covariant or contravariant during initialization.</p>
+
+<h3>Bounded Type Parameters</h3>
+
+
+<p>Type bounds can be restricted with the super or extends keyword. If you want to restrict initialization to instances of itself or it&rsquo;s subtype, you use the extends keyword(covariance). If you need to limit the initiziation to itself or all supertypes, you use the super keyword. You are not limited in how many bounds you can specify. You can only have one class bound(since multiple inheritance is not allowed in Java), but you can have an unlimited number of interface bounds!</p>
 
 <h3>History of Type erasure</h3>
 
