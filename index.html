@@ -1,332 +1,172 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Stan&#8217;s Signed Snippets</title>
-  <meta name="author" content="Stanislav Palatnik">
-
-  
-  <meta name="description" content="Why do we need Java generics? Generics introduce a new level of compile-time type safety. This in itself makes it one of the most impactful updates &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://stanpalatnik.github.io/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Stan's Signed Snippets" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Stan&#8217;s Signed Snippets</a></h1>
-  
-    <h2>My positive/negative coding experiences</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="stanpalatnik.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="http://spalatnik.com">Main</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/21/java-generics-in-depth/">Java Generics in Depth</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-02-21T16:59:07-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>4:59 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Why do we need Java generics?</h3>
-
-
-<p>Generics introduce a new level of compile-time type safety. This in itself makes it one of the most impactful updates to Java’s core, and arguable, brings a sane amount of type safety to the Collections framework. The most common bug this is meant to address is a nasty ClassCastException when we believe an object is of one type when really it&rsquo;s not. With Generics, this is caught at compile-time. Additionally, it improves code readability by absolving the programmer from using explicit casts.</p>
-
-<h3>Quick overview of terminology</h3>
-
-
-
-
-<figure class='code'><figcaption><span>simple generic class that extends another generic class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MimicList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">T</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">findAlphaMimic</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</span><span class='line'><span class="o">...</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here, MimicList<T> is a generic type. T is the type placeholder. The placeholder isn&rsquo;t limited to a single letter - any valid Java identifier will do. A generic type can have one or more type placeholders. By adding <T> type holder to a class, we are turning it into a generic type. It is represented by a concrete type when we declare/initialize MimicList as a concrete parameterized type. If your generic class is extending or implementing another generic class, you can use the same type placeholder(T) in the class we are extending to represent the same type. You cannot initialize a generic type directly(new MimicList<T>() ) because it is an abstract type. You also cannot use a primitive type to as a type parameter. That&rsquo;s because it must be convertible to java.lang.Object when the compiler performs type erasure.</p>
-
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stanislav Palatnik</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div id="photo-header" class="text-center">
+            <div id="text-header">
+              <h1>Hello,<br> my name is <span>Stanislav Palatnik</span></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-7">
+          <!-- ABOUT ME -->
+          <div class="box">
+            <h2>About Me</h2>
+            <p>I'm an avid software developer in NYC. I've been programming ever since I was a kid and I haven't looked back. Programming is not only my profession, it is my hobby. It empowers me to be creative. It inspires me to keep learning about new technologies and methodologies
+			so that I always use the best tool for the job.</p>
+          </div>
+		 <!-- EXPERIENCE -->
+          <div class="box">
+            <h2>Experience</h2>
+            <div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">BAE Systems Applied Intelligence</div>
+                <div class="year">June 2016 - Present</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Senior Software Engineer</div>
+                <div class="description">Work with Java, Scala, Struts, and Microsoft SQL Server to develop and maintain an Enterprise-level compliance 
+            mail archiving solution. <br/> 
+            Collaborate with team to plan, design, and implement product functionality. <br/> 
+              Design and implement a centralized logging solution using Logstash and Kibana. 
+            </div>
+              </div>
+            </div>
+            <div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">BAE Systems Applied Intelligence</div>
+                <div class="year">July 2012 - Present</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Software Engineer</div>
+                <div class="description">Work with Java, Scala, Struts, and Microsoft SQL Server to develop and maintain an Enterprise-level compliance 
+						mail archiving solution. <br/>
+            Work with SQL Server to develop and optimize stored procedures. <br/> 
+						Developed a multi-threaded Java application to GZIP email across all storage volumes to save space. 
+					    Leveraged Scala with the <a href="http://spray.io">spray.io framework</a> to build a lightweight, scalable REST API as the backend for a new client portal
+						</div>
+              </div>
+            </div>
+            <div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">Google Summer of Code / Genome Informatics</div>
+                <div class="year">May 2011 - Sept 2011</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Software Developer</div>
+                <div class="description">Used Java and the <a href="https://jersey.java.net/">Jersey JAX-RS framework</a> to implement a RESTful HTTP Web Service API.
+									     Leveraged the Spring framework for autowired dependency injection and configuration.<br/>
+										 Used JUnit for unit testing and performed extensive MySQL query optimization through 
+										  benchmarking/profiling </div>
+              </div>
+            </div>
+			<div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">Polytechnic Institute of NYU</div>
+                <div class="year">Sept 2009 - May 2012</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Teacher Assistant</div>
+                <div class="description">Led lectures and graded assignments.</div>
+              </div>
+            </div>
+			<div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">Google Summer of Code / Geeklog</div>
+                <div class="year">May 2010 - Sept 2010</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Software Developer</div>
+                <div class="description">Worked with PHP, MySQL, Microsoft SQL Server, PostgreSQL and JavaScript to design and implement a social 
+											networking plug-in for the Geeklog Content Management System. 
+ </div>
+              </div>
+            </div>
+			<div class="job clearfix">
+              <div class="col-xs-3 nopadding">
+                <div class="where">Google Summer of Code / Geeklog</div>
+                <div class="year">May 2009 - Sept 2009</div>
+              </div>
+              <div class="col-xs-9">
+                <div class="profession">Software Developer</div>
+                <div class="description">Employed PHP, MySQL, and PostgreSQL to code and implement PostgreSQL support into the 
+											Geeklog database abstraction layer. Created PL/pgSQL functions for compatibility with MySQL. 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/02/21/java-generics-in-depth/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">Using Express.js and Dust.js on Node.js</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-04-06T18:53:04-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>6:53 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Express.js is the most full-featured and popular Node.js open source framework. However, its default template library of choice – Jade, is far from impressive. Not only does it use it’s own syntax(you cannot use plain HTML), but it is limited to server-side rendering. In this post, we will setup Dust.js with Express.js for server-side rendering, as well as discuss a possible implementation with client-side rendering. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/20/securing-php-flash-communication/">Securing PHP-Flash Communication</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-02-20T17:38:24-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>5:38 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Virtually every computer in the world has flash installed. Whether you’re running Debain or Windows 7, there’s a distribution of Adobe Flash available for you. That makes Flash the most interoperable environment available. Now let’s say you want to embed Flash into a website. Either you want a submission form, chat box, or a simple game, you will most likely need to communicate back and forth with the server. Doesn’t sound hard at all, especially with so many libraries available and so many services you can use(REST, XMLRPC, JSON, XMLSocket for low latency communication, or just a simple HTTP GET request to the PHP page). However, how sure are you of the validity of the data transferred from the client-side Flash app back to your server?</p>
-
-<p>All programming languages preach to never trust user input directly. For a simple example, a good program will even check that a person’s name is made of valid and accepted characters. However, too many people unfortunately ignore this rule when they create Flash apps. Even if you’re creating a contact form field, there are many ways a user could exploit your site if you don’t properly secure the client’s input. Most notably, he could create an SQL injection the input fields.</p>
-
-<p>Fortunately for form fields, there are bullet proof ways to secure them. In the following section I will discuss those. However, I will also talk about more sophisticated applications such as games which track levels and submit high scores. In these cases, it’s not possible to secure your high score list 100% , but you can make it sufficiently difficult for most.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/02/20/securing-php-flash-communication/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/">Parenthesis Confusion in C++</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2011-01-20T16:44:32-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>4:44 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I ran into this problem at least once, and I never actually thought about why it worked with or without the parenthesis, and thought that I was just doing something else wrong. But it was only so easy for me because I was doing a relatively small project, and the changes usually didn&#8217;t affect any other files. I never really thought why or how it works. But if you&#8217;re developing large scale applications or just portions of it, you need to make sure that you use it properly, or it might be a pain to debug it later. For example, as I will explain later, forgetting to add a parenthesis will keep POD class values from being properly initialized in some cases. If you don&#8217;t know the properties of POD class initialization, you could be scratching your head when a comparison fails or the compiler throws you a run-time error! If this doesn&#8217;t make sense yet, I recommend that you continue reading.</p></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/02/21/java-generics-in-depth/">Java Generics in Depth</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/06/using-express-dot-js-and-dust-dot-js-on-node-dot-js/">Using Express.js and Dust.js on Node.js</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/02/20/securing-php-flash-communication/">Securing PHP-Flash Communication</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/01/20/parenthesis-confusion-in-c-plus-plus/">Parenthesis Confusion in C++</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/stanpalatnik">@stanpalatnik</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'stanpalatnik',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-
-
-  
-</aside>
-
+              </div>
+            </div>
+          </div>
+          <!-- EDUCATION -->
+          <div class="box">
+            <h2>Education</h2>
+            <ul id="education" class="clearfix">
+              <li>
+                <div class="year pull-left">2012</div>
+                <div class="description pull-right">
+                  <h3>NYU Tandon School of Engineering</h3>
+                  <p>Graduated with a combined <b>Bachelors</b> + <b>Masters</b> degrees in Computer Science. Also <b>minored</b> in Business and Technology Management.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-5">
+		 <!-- BLOG -->
+          <div class="box clearfix">
+            <h2>My Blog</h2>
+            <div class="contact-item">
+              <div class="icon pull-left text-center"><span class="fa fa-comment fa-fw"></span></div>
+              <div class="title only pull-right"><a href="http://stanpalatnik.github.io">Signed Snippets</a></div>
+            </div>
+          </div>
+	      <!-- CONTACT -->
+          <div class="box clearfix">
+            <h2>Contact</h2>
+			<div class="contact-item">
+              <div class="icon pull-left text-center"><span class="fa fa-envelope fa-fw"></span></div>
+              <div class="title only pull-right"><a href="mailto:stan@spalatnik.com">stan@spalatnik.com</a></div>
+            </div>
+			<div class="contact-item">
+              <div class="icon pull-left text-center"><span class="fa fa-linkedin fa-fw"></span></div>
+              <div class="title only pull-right"><a href="http://www.linkedin.com/pub/stanislav-palatnik/10/582/61a/">LinkedIn</a></div>
+            </div>
+			<div class="contact-item">
+              <div class="icon pull-left text-center"><span class="fa fa-stack-overflow fa-fw"></span></div>
+              <div class="title only pull-right"><a href="http://stackoverflow.com/users/138228/stanislav-palatnik">StackOverflow</a></div>
+            </div>
+          </div>
+		  <!-- BLOG -->
+          <div class="box clearfix">
+            <h2>Resume PDF</h2>
+            <div class="contact-item">
+              <div class="icon pull-left text-center"><span class="fa fa-file-o fa-fw"></span></div>
+              <div class="title only pull-right"><a href="/Stanislav_Palatnik_Resume.pdf">Download</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Stanislav Palatnik -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+    <!-- JQUERY -->
+    <script src="js/jquery.min.js"></script>
+    <!-- BOOTSTRAP -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- SCRIPTS -->
+    <script src="js/scripts.js"></script>
+  </body>
 </html>
